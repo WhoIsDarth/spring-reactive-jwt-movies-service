@@ -1,0 +1,17 @@
+spring:
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/movies
+    username: movies_details_service
+    password: password
+  liquibase:
+    enabled: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:7010/auth/realms/movies
+          jwk-set-uri: http://localhost:7010/auth/realms/movies/protocol/openid-connect/certs
+
+omdb:
+  api-key: 2a1a9ced
+  base-url: http://www.omdbapi.com

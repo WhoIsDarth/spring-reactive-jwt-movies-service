@@ -1,0 +1,181 @@
+openapi: "3.0.3"
+info:
+  title: "Movies Details Service API"
+  description: "This API provides access to movie details, ratings, and nomination statuses. It allows users to retrieve movie information, rate movies, and check their nomination and award statuses."
+  version: "1.0.0"
+servers:
+  - url: "https://localhost:8080"
+
+paths:
+  /movies:
+    get:
+      summary: "Finds a movie by query params"
+      description: "Retrieves a single movie matching the specified query params."
+      operationId: "findByQuery"
+      tags:
+        - "Movies"
+      parameters:
+        - name: "title"
+          in: query
+          required: true
+          description: "Title of the movie."
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Successful response with details of the movie."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MovieDto"
+        "404":
+          description: "Movie not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /movies/{id}:
+    get:
+      summary: "Retrieve Movie Details"
+      description: "Fetches details of a movie by its unique identifier."
+      operationId: "findById"
+      tags:
+        - "Movies"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "Unique identifier of the movie."
+          schema:
+            type: "string"
+            format: "uuid"
+      responses:
+        "200":
+          description: "Successful response with details of the movie."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MovieDto"
+        "404":
+          description: "Movie not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /movies/top:
+    get:
+      summary: "Top Rated Movies"
+      description: "Retrieves a list of top-rated movies, limited by the specified number."
+      operationId: "findTopRatedMovies"
+      tags:
+        - "Movies"
+      parameters:
+        - name: "limit"
+          in: "query"
+          required: true
+          description: "Maximum number of top-rated movies to retrieve."
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "Successful response with a list of top-rated movies."
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/MovieDto"
+
+  /movies/ratings:
+    post:
+      summary: "Add Rating For a Movie"
+      description: "Submit a rating for a movie identified by its unique identifier."
+      operationId: "rateMovie"
+      tags:
+        - "Ratings"
+      requestBody:
+        description: "Rating details."
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RatingDto"
+      responses:
+        "200":
+          description: "Rating submitted successfully."
+        "404":
+          description: "Movie not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+  /movies/nominations/status:
+    get:
+      summary: "Movie Nomination Status"
+      description: "Checks the nomination status of a movie for a specific award."
+      operationId: "findMovieNominationStatus"
+      tags:
+        - "Nominations"
+      parameters:
+        - name: "movie_title"
+          in: "query"
+          required: true
+          description: "Title of the movie."
+          schema:
+            type: "string"
+        - name: "nomination_title"
+          in: "query"
+          required: true
+          description: "Title of the nomination or award."
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Successful response with the nomination status of the movie."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MovieNominationStatusDto"
+        "404":
+          description: "Movie not found."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+
+components:
+  schemas:
+    MovieDto:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          format: "uuid"
+        title:
+          type: "string"
+    RatingDto:
+      type: "object"
+      properties:
+        movie_id:
+          type: "string"
+          format: "uuid"
+        stars:
+          type: "integer"
+          format: "int32"
+    MovieNominationStatusDto:
+      type: "object"
+      properties:
+        is_winner:
+          type: "boolean"
+    ApiError:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+          format: "int32"
+        message:
+          type: "string"

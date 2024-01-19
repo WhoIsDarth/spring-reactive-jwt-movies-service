@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/DDL/17-01-2024-init-db.yml
+  - include:
+      file: db/changelog/DML/18-01-2024-seed-best-pictures.yml

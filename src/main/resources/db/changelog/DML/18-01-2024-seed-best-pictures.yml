@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: '1'
+      author: 'Aleksandr Nagaikin'
+      changes:
+        - sqlFile:
+            dbms: 'mysql'
+            path: 'SQL/18-01-2024-seed-best-pictures.sql'
+            relativeToChangelogFile: true

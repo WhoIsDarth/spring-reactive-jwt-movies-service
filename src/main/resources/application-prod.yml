@@ -1,0 +1,21 @@
+spring:
+  r2dbc:
+    url: ${R2DBC_DATABASE_URL}
+    username: ${R2DBC_DATABASE_USERNAME}
+    password: ${R2DBC_DATABASE_PASSWORD}
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/changelog-master.yml
+    url: ${LIQUIDBASE_DATABASE_URL}
+    user: ${LIQUIDBASE_DATABASE_USERNAME}
+    password: ${LIQUIDBASE_DATABASE_PASSWORD}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI}
+
+omdb:
+  api-key: ${OMDB_API_KEY}
+  base-url: http://www.omdbapi.com
